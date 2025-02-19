@@ -1,0 +1,4 @@
+bandit==1.7.5
+sonarqube==1.0.0
+docker==6.1.2
+python-dotenv==1.0.0

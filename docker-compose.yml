@@ -1,0 +1,29 @@
+# version: '3.8'
+
+services:
+  sonarqube:
+    image: sonarqube:community
+    ports:
+      - "9000:9000"
+    networks:
+      - sec-net
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+
+  zap:
+    image: owasp/zap2docker-stable
+    command: zap-baseline.py -t http://localhost:8080 -J /zap/wrk/zap_results.json
+    volumes:
+      - ./reports:/zap/wrk
+    networks:
+      - sec-net
+    depends_on:
+      - sonarqube
+
+networks:
+  sec-net:
+
+volumes:
+  sonarqube_data:
